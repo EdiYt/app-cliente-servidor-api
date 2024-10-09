@@ -33,3 +33,18 @@ exports.updateBook = (req, res) => {
         }
     );
 };
+
+exports.getBookById = (req, res) => {
+    const bookId = req.params.id;
+    const query = 'SELECT * FROM libros WHERE id = ?';
+
+    booksDB.query(query, [bookId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error en la base de datos' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Libro no encontrado' });
+        }
+        res.json(results[0]);
+    });
+};

@@ -62,3 +62,19 @@ exports.updateUser = async (req, res) => {
         res.status(500).json({ message: 'Error en el servidor' });
     }
 };
+
+// Obtener un usuario por ID
+exports.getUserById = (req, res) => {
+    const { id } = req.params;
+
+    loginDB.query('SELECT * FROM usuarios WHERE id = ?', [id], (err, results) => {
+        if (err) {
+            console.error('Error en la base de datos:', err);
+            return res.status(500).json({ message: 'Error en la base de datos' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.json(results[0]); // Devuelve el primer resultado como objeto
+    });
+};

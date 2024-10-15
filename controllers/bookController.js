@@ -1,78 +1,60 @@
-const { booksDB } = require('../config/db');
-const path = require('path');
+const booksDao = require('../dao/booksDao');
 
-
-exports.getBooks = (req, res) => {
-    booksDB.query('SELECT * FROM libros', (err, results) => {
-        if (err) return res.status(500).json({ message: 'Error en la base de datos' });
-        res.json(results);
-    });
-};
-
-exports.addBook = (req, res) => {
-    console.log('Iniciando addBook');
-    console.log('Contenido de req.body:', req.body);
-    console.log('Contenido de req.files:', req.files);
-
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).json({ message: 'No se ha subido ningún archivo' });
+// Obtener todos los libros
+async function getAllBooks(req, res) {
+    try {
+        const books = await booksDao.getAll();
+        res.json(books);
+    } catch (err) {
+        res.status(500).json({ message: 'Error al obtener los libros', error: err });
     }
+}
 
-    const { nombre, autor, genero, estatus } = req.body;
-    const pdfFile = req.files.pdf;
-    const uploadPath = path.join(__dirname, '../uploads/', pdfFile.name);
-
-    pdfFile.mv(uploadPath, (err) => {
-        if (err) {
-            console.error('Error al mover el archivo:', err);
-            return res.status(500).json({ message: 'Error al subir el archivo', error: err.message });
+// Obtener un libro por su ID
+async function getBookById(req, res) {
+    try {
+        const id = req.params.id;
+        const book = await booksDao.getById(id);
+        if (book) {
+            res.json(book);
+        } else {
+            res.status(404).json({ message: 'Libro no encontrado' });
         }
+    } catch (err) {
+        res.status(500).json({ message: 'Error al obtener el libro', error: err });
+    }
+}
 
-        console.log('Archivo PDF guardado exitosamente');
+// Insertar un nuevo libro
+async function createBook(req, res) {
+    try {
+        const { nombre, autor, genero, estatus } = req.body; 
+        const newBookId = await booksDao.insert({ nombre, autor, genero, estatus });
+        res.status(201).json({ message: 'Libro creado', bookId: newBookId });
+    } catch (err) {
+        res.status(500).json({ message: 'Error al crear el libro', error: err });
+    }
+}
 
-        booksDB.query(
-            'INSERT INTO libros (nombre, autor, genero, estatus, pdf_path) VALUES (?, ?, ?, ?, ?)',
-            [nombre, autor, genero, estatus === 'true' ? 1 : 0, uploadPath],
-            (err, results) => {
-                if (err) {
-                    console.error('Error en la consulta de la base de datos:', err);
-                    fs.unlink(uploadPath, (unlinkErr) => {
-                        if (unlinkErr) console.error('Error al eliminar el archivo PDF:', unlinkErr);
-                    });
-                    return res.status(500).json({ message: 'Error en la base de datos', error: err.message });
-                }
-                console.log('Libro agregado exitosamente a la base de datos');
-                res.status(201).json({ message: 'Libro agregado', id: results.insertId });
-            }
-        );
-    });
-};
-
-exports.updateBook = (req, res) => {
-    const { id } = req.params;
-    const { nombre, autor, genero, estatus } = req.body;
-
-    booksDB.query(
-        'UPDATE libros SET nombre = ?, autor = ?, genero = ?, estatus = ? WHERE id = ?',
-        [nombre, autor, genero, estatus, id],
-        (err, results) => {
-            if (err) return res.status(500).json({ message: 'Error en la base de datos' });
+// Actualizar un libro
+async function updateBook(req, res) {
+    try {
+        const id = req.params.id;
+        const { nombre, autor, genero, estatus } = req.body; 
+        const affectedRows = await booksDao.update(id, { nombre, autor, genero, estatus });
+        if (affectedRows > 0) {
             res.json({ message: 'Libro actualizado' });
+        } else {
+            res.status(404).json({ message: 'Libro no encontrado' });
         }
-    );
-};
+    } catch (err) {
+        res.status(500).json({ message: 'Error al actualizar el libro', error: err });
+    }
+}
 
-exports.getBookById = (req, res) => {
-    const bookId = req.params.id;
-    const query = 'SELECT * FROM libros WHERE id = ?';
-
-    booksDB.query(query, [bookId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error en la base de datos' });
-        }
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'Libro no encontrado' });
-        }
-        res.json(results[0]);
-    });
+module.exports = {
+    getAllBooks,
+    getBookById,
+    createBook,
+    updateBook,
 };

@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const loginDB = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456', // Cambia la contraseña si es necesario
+    password: '123456', 
     database: 'login_db'
 });
 
@@ -12,7 +12,7 @@ const loginDB = mysql.createConnection({
 const booksDB = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456', // Cambia la contraseña si es necesario
+    password: '123456', 
     database: 'modulo_libros'
 });
 

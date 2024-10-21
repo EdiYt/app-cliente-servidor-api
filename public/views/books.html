@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/styles_books.css">
     <title>Catálogo de Libros</title>
 </head>
 <body>
@@ -16,58 +16,57 @@
         </ul>
     </nav>
 
-    <h1>Catálogo de Libros</h1>
+    <div class="container">
+        <h1>Catálogo de Libros</h1>
     
-    <h2>Registrar Libro</h2>
-    <form id="registerBookForm" enctype="multipart/form-data">
-        <label for="registerName">Nombre:</label>
-        <input type="text" id="registerName" required />
-        
-        <label for="registerAuthor">Autor:</label>
-        <input type="text" id="registerAuthor" required />
-        
-        <label for="registerGenre">Género:</label>
-        <input type="text" id="registerGenre" required />
-        
-        <label for="registerPdf">Seleccionar PDF:</label>
-        <input type="file" id="registerPdf" accept="application/pdf" required />
-        
-        <button type="submit">Registrar</button>
-    </form>    
+        <h2>Registrar Libro</h2>
+        <form id="registerBookForm" enctype="multipart/form-data">
+            <label for="registerName">Nombre:</label>
+            <input type="text" id="registerName" required />
+            
+            <label for="registerAuthor">Autor:</label>
+            <input type="text" id="registerAuthor" required />
+            
+            <label for="registerGenre">Género:</label>
+            <input type="text" id="registerGenre" required />
+            
+            <label for="registerPdf">Seleccionar PDF:</label>
+            <input type="file" id="registerPdf" accept="application/pdf" required />
+            
+            <button type="submit">Registrar</button>
+        </form>    
 
-    <h2 id="updateTitle" style="display: none;">Actualizar Libro</h2>
-    <form id="updateBookForm" style="display: none;">
-        <input type="hidden" id="bookId" />
-        
-        <h3>Actualizar Libro</h3>
-        <label for="name">Nombre:</label>
-        <input type="text" id="name" required />
-        
-        <label for="author">Autor:</label>
-        <input type="text" id="author" required />
-        
-        <label for="genre">Género:</label>
-        <input type="text" id="genre" required />
-        
-        <label for="status">Estatus:</label>
-        <input type="checkbox" id="status" />
-        
-        <button type="submit">Actualizar</button>
-    </form>
+        <h2 id="updateTitle" style="display: none;">Actualizar Libro</h2>
+        <form id="updateBookForm" style="display: none;">
+            <input type="hidden" id="bookId" />
+            
+            <h3>Actualizar Libro</h3>
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" required />
+            
+            <label for="author">Autor:</label>
+            <input type="text" id="author" required />
+            
+            <label for="genre">Género:</label>
+            <input type="text" id="genre" required />
+            
+            <button type="submit">Actualizar</button>
+        </form>
 
-    <h2>Lista de Libros</h2>
-    <table id="bookTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Autor</th>
-                <th>Género</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <h2>Lista de Libros</h2>
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Autor</th>
+                    <th>Género</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
     <script src="/public/js/books.js"></script>
 </body>

@@ -7,6 +7,15 @@
     <title>Catálogo de Libros</title>
 </head>
 <body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="users.html">Catálogo de Usuarios</a></li>
+            <li><a href="books.html">Catálogo de Libros</a></li>
+        </ul>
+    </nav>
+
     <h1>Catálogo de Libros</h1>
     
     <h2>Registrar Libro</h2>
@@ -20,9 +29,6 @@
         <label for="registerGenre">Género:</label>
         <input type="text" id="registerGenre" required />
         
-        <label for="registerStatus">Estatus:</label>
-        <input type="checkbox" id="registerStatus" />
-        
         <label for="registerPdf">Seleccionar PDF:</label>
         <input type="file" id="registerPdf" accept="application/pdf" required />
         
@@ -33,7 +39,7 @@
     <form id="updateBookForm" style="display: none;">
         <input type="hidden" id="bookId" />
         
-        <h3>Actualizar Libro</h3> 
+        <h3>Actualizar Libro</h3>
         <label for="name">Nombre:</label>
         <input type="text" id="name" required />
         

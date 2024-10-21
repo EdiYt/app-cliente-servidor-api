@@ -91,20 +91,20 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
 
 // Evento para manejar el registro de un libro
 document.getElementById('registerBookForm').addEventListener('submit', function (event) {
-    event.preventDefault(); 
+    event.preventDefault(); // Evitar el envío del formulario
     const formData = {
         nombre: document.getElementById('registerName').value,
         autor: document.getElementById('registerAuthor').value,
-        genero: document.getElementById('registerGenre').value,
-        estatus: document.getElementById('registerStatus').checked,
+        genero: document.getElementById('registerGenre').value
+        // No incluimos estatus en el envío, ya que es gestionado por defecto en la base de datos
     };
 
     fetch('http://localhost:3000/api/books', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json' // Enviar como JSON
         },
-        body: JSON.stringify(formData) 
+        body: JSON.stringify(formData) // Convertir a JSON
     })
     .then(response => {
         if (!response.ok) {
@@ -112,15 +112,15 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
                 throw new Error(err.message || 'Error desconocido al registrar el libro');
             });
         }
-        return response.json(); 
+        return response.json(); // Parsear la respuesta JSON
     })
     .then(data => {
         alert('Libro registrado correctamente.');
-        loadBooks(); 
-        document.getElementById('registerBookForm').reset(); 
+        loadBooks(); // Volver a cargar los libros
+        document.getElementById('registerBookForm').reset(); // Limpiar el formulario
     })
     .catch(error => {
         console.error('Error al registrar el libro:', error);
-        alert('Error al registrar el libro: ' + error.message); 
+        alert('Error al registrar el libro: ' + error.message); // Mensaje de error
     });
 });

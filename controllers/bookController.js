@@ -31,8 +31,8 @@ async function getBookById(req, res) {
 // Insertar un nuevo libro
 async function createBook(req, res) {
     try {
-        const { nombre, autor, genero, estatus } = req.body; 
-        const newBookId = await booksDao.insert({ nombre, autor, genero, estatus });
+        const { nombre, autor, genero } = req.body; // No incluimos estatus
+        const newBookId = await booksDao.insert({ nombre, autor, genero });
         res.status(201).json({ message: 'Libro creado', bookId: newBookId });
     } catch (err) {
         res.status(500).json({ message: 'Error al crear el libro', error: err });

@@ -14,4 +14,5 @@ router.post('/', bookController.createBook);
 // Ruta para actualizar un libro
 router.put('/:id', bookController.updateBook);
 
+// Exportar el router para ser usado en el servidor principal
 module.exports = router;

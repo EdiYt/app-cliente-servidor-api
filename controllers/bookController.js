@@ -1,3 +1,4 @@
+const db = require('../config/db');
 const booksDao = require('../dao/booksDao');
 
 // Obtener todos los libros

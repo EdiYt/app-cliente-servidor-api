@@ -29,9 +29,12 @@ exports.getUserById = async (req, res) => {
 // Actualizar un usuario
 exports.updateUser = async (req, res) => {
     const { id } = req.params;
-    const { name, email } = req.body;
+    const { nombre, email } = req.body;
+
+    console.log({ id, nombre, email }); // <-- Agrega esto para verificar los valores
+
     try {
-        const [result] = await db.query('UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?', [name, email, id]);
+        const [result] = await db.query('UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?', [nombre, email, id]);
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }

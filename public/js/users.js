@@ -68,6 +68,8 @@ document.getElementById('updateUserForm').addEventListener('submit', function (e
         return;
     }
 
+    console.log({ userId, name, email }); // <-- Agrega esto para verificar los valores
+
     fetch(`http://localhost:3000/api/users/${userId}`, {
         method: 'PUT',
         headers: {

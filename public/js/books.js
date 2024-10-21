@@ -16,9 +16,9 @@ function loadBooks() {
             bookTable.innerHTML = ''; 
             books.forEach(book => {
                 const row = document.createElement('tr');
-                
-                const pdfLink = book.pdf_path ? `<a href="${book.pdf_path}" target="_blank">Ver PDF</a>` : 'No disponible';
-                
+
+                const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
+
                 const estatus = book.estatus ? 'Disponible' : 'No disponible';
 
                 row.innerHTML = `
@@ -26,23 +26,23 @@ function loadBooks() {
                     <td>${book.nombre}</td>
                     <td>${book.autor}</td>
                     <td>${book.genero}</td>
+                    <td>${estatus}</td>
                     <td>${pdfLink}</td>
-                    <td>${estatus}</td> <!-- Nueva columna de estatus -->
                     <td><button onclick="editBook(${book.id})">Actualizar</button></td>
                 `;
-                bookTable.appendChild(row);
+                bookTable.appendChild(row); 
             });
         })
         .catch(error => console.error('Error al cargar los libros:', error));
 }
 
+// Función para mostrar el PDF en el iframe
 function viewPdf(pdfUrl) {
     const pdfViewer = document.getElementById('pdfViewer');
     const pdfFrame = document.getElementById('pdfFrame');
 
-    pdfFrame.src = pdfUrl;
-    
-    pdfViewer.style.display = 'block';
+    pdfFrame.src = pdfUrl; 
+    pdfViewer.style.display = 'block'; 
 }
 
 // Función para editar un libro
@@ -136,6 +136,6 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
     })
     .catch(error => {
         //console.error('Error al registrar el libro:', error); 
-        alert('Libro registrado correctamente. La página se recargará.');
+        alert('Libro registrado correctamente.');
     });
 });

@@ -13,7 +13,7 @@ function loadBooks() {
         })
         .then(books => {
             const bookTable = document.querySelector('#bookTable tbody');
-            bookTable.innerHTML = ''; // Limpiar la tabla antes de agregar los libros
+            bookTable.innerHTML = ''; 
             books.forEach(book => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -25,7 +25,7 @@ function loadBooks() {
                         <button onclick="editBook(${book.id})">Actualizar</button>
                     </td>
                 `;
-                bookTable.appendChild(row); // Agregar la fila a la tabla
+                bookTable.appendChild(row); 
             });
         })
         .catch(error => console.error('Error al cargar los libros:', error));
@@ -47,14 +47,14 @@ function editBook(bookId) {
             document.getElementById('genre').value = book.genero;
             document.getElementById('status').checked = book.estatus;
 
-            document.getElementById('updateBookForm').style.display = 'block'; // Mostrar el formulario de actualización
+            document.getElementById('updateBookForm').style.display = 'block'; 
         })
         .catch(error => console.error('Error al cargar el libro:', error));
 }
 
 // Evento para manejar la actualización de un libro
 document.getElementById('updateBookForm').addEventListener('submit', function (event) {
-    event.preventDefault(); // Evitar el envío del formulario
+    event.preventDefault(); 
     const bookId = document.getElementById('bookId').value;
     const name = document.getElementById('name').value;
     const author = document.getElementById('author').value;
@@ -64,7 +64,7 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
     fetch(`http://localhost:3000/api/books/${bookId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json' // Enviar como JSON
+            'Content-Type': 'application/json' 
         },
         body: JSON.stringify({
             nombre: name,
@@ -76,9 +76,9 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
     .then(response => {
         if (response.ok) {
             alert('Libro actualizado correctamente.');
-            loadBooks(); // Volver a cargar los libros
-            document.getElementById('updateBookForm').reset(); // Limpiar el formulario
-            document.getElementById('updateBookForm').style.display = 'none'; // Ocultar el formulario
+            loadBooks(); 
+            document.getElementById('updateBookForm').reset(); 
+            document.getElementById('updateBookForm').style.display = 'none'; 
         } else {
             alert('Error al actualizar el libro.');
         }
@@ -91,7 +91,7 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
 
 // Evento para manejar el registro de un libro
 document.getElementById('registerBookForm').addEventListener('submit', function (event) {
-    event.preventDefault(); // Evitar el envío del formulario
+    event.preventDefault(); 
     const formData = {
         nombre: document.getElementById('registerName').value,
         autor: document.getElementById('registerAuthor').value,
@@ -102,9 +102,9 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
     fetch('http://localhost:3000/api/books', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json' // Enviar como JSON
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData) // Convertir a JSON
+        body: JSON.stringify(formData) 
     })
     .then(response => {
         if (!response.ok) {
@@ -112,15 +112,15 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
                 throw new Error(err.message || 'Error desconocido al registrar el libro');
             });
         }
-        return response.json(); // Parsear la respuesta JSON
+        return response.json(); 
     })
     .then(data => {
         alert('Libro registrado correctamente.');
-        loadBooks(); // Volver a cargar los libros
-        document.getElementById('registerBookForm').reset(); // Limpiar el formulario
+        loadBooks(); 
+        document.getElementById('registerBookForm').reset(); 
     })
     .catch(error => {
         console.error('Error al registrar el libro:', error);
-        alert('Error al registrar el libro: ' + error.message); // Mensaje de error
+        alert('Error al registrar el libro: ' + error.message); 
     });
 });

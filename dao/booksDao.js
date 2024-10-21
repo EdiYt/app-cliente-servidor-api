@@ -1,29 +1,49 @@
-const { booksDB } = require('../config/db');
+const db = require('../config/db'); 
 
 // Método que devuelve todos los libros
 async function getAll() {
-    const [rows] = await booksDB.query('SELECT * FROM libros');
-    return rows;
+    try {
+        const [rows] = await db.query('SELECT * FROM libros'); 
+        return rows;
+    } catch (err) {
+        console.error('Error en getAll:', err); 
+        throw err;
+    }
 }
 
 // Método que devuelve un libro por ID
 async function getById(id) {
-    const [rows] = await booksDB.query('SELECT * FROM libros WHERE id = ?', [id]);
-    return rows[0]; // Retorna el primer libro encontrado
+    try {
+        const [rows] = await db.query('SELECT * FROM libros WHERE id = ?', [id]);
+        return rows[0]; 
+    } catch (err) {
+        console.error('Error en getById:', err); 
+        throw err;
+    }
 }
 
 // Método que inserta un nuevo libro
 async function insert(book) {
-    const { nombre, autor, genero, estatus } = book; 
-    const result = await booksDB.query('INSERT INTO libros (nombre, autor, genero, estatus) VALUES (?, ?, ?, ?)', [nombre, autor, genero, estatus]);
-    return result[0].insertId; // Retorna el ID del libro insertado
+    try {
+        const { nombre, autor, genero, estatus } = book; 
+        const result = await db.query('INSERT INTO libros (nombre, autor, genero, estatus) VALUES (?, ?, ?, ?)', [nombre, autor, genero, estatus]);
+        return result[0].insertId; 
+    } catch (err) {
+        console.error('Error en insert:', err); 
+        throw err;
+    }
 }
 
 // Método que actualiza los datos de un libro
 async function update(id, book) {
-    const { nombre, autor, genero, estatus } = book; 
-    const result = await booksDB.query('UPDATE libros SET nombre = ?, autor = ?, genero = ?, estatus = ? WHERE id = ?', [nombre, autor, genero, estatus, id]);
-    return result[0].affectedRows; // Retorna el número de filas afectadas
+    try {
+        const { nombre, autor, genero, estatus } = book; 
+        const result = await db.query('UPDATE libros SET nombre = ?, autor = ?, genero = ?, estatus = ? WHERE id = ?', [nombre, autor, genero, estatus, id]);
+        return result[0].affectedRows; 
+    } catch (err) {
+        console.error('Error en update:', err); 
+        throw err;
+    }
 }
 
 module.exports = {

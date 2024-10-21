@@ -1,4 +1,3 @@
-// js/users.js
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
 });
@@ -13,7 +12,7 @@ function loadUsers() {
         })
         .then(users => {
             const userTable = document.querySelector('#userTable tbody');
-            userTable.innerHTML = ''; // Limpia la tabla antes de cargar nuevos datos
+            userTable.innerHTML = '';
             users.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -37,14 +36,13 @@ function editUser(userId) {
             if (!response.ok) {
                 throw new Error('Usuario no encontrado');
             }
-            return response.json(); // Parsear la respuesta a JSON
+            return response.json(); 
         })
         .then(user => {
             document.getElementById('userId').value = user.id; 
             document.getElementById('name').value = user.nombre;
             document.getElementById('email').value = user.email;
 
-            // Mostrar el formulario de actualización
             document.getElementById('updateSection').style.display = 'block';
         })
         .catch(error => console.error('Error al cargar el usuario:', error));
@@ -52,36 +50,35 @@ function editUser(userId) {
 
 // Función para ocultar el formulario de actualización
 function hideUpdateForm() {
-    document.getElementById('updateSection').style.display = 'none'; // Ocultar el formulario
+    document.getElementById('updateSection').style.display = 'none'; 
 }
 
 // Evento para manejar la actualización de un usuario
 document.getElementById('updateUserForm').addEventListener('submit', function (event) {
-    event.preventDefault(); // Evitar el envío del formulario
+    event.preventDefault();
     const userId = document.getElementById('userId').value;
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
 
-    // Validar que los campos no estén vacíos
     if (!name || !email) {
         alert('Todos los campos son obligatorios.');
         return;
     }
 
-    console.log({ userId, name, email }); // <-- Agrega esto para verificar los valores
+    console.log({ userId, name, email }); 
 
     fetch(`http://localhost:3000/api/users/${userId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json' // Enviar como JSON
+            'Content-Type': 'application/json' 
         },
-        body: JSON.stringify({ nombre: name, email: email }) // Convertir a JSON
+        body: JSON.stringify({ nombre: name, email: email }) 
     })
     .then(response => {
         if (response.ok) {
             alert('Usuario actualizado correctamente.');
-            loadUsers(); // Recargar la tabla de usuarios
-            hideUpdateForm(); // Ocultar el formulario después de la actualización
+            loadUsers(); 
+            hideUpdateForm(); 
         } else {
             alert('Error al actualizar el usuario.');
         }

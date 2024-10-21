@@ -13,10 +13,10 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: 'El usuario ya existe' });
         }
 
-        // Encriptamos la contraseña
+        // Encriptado de contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Registramos un nuevo usuario
+        // Registro de un nuevo usuario
         await db.query('INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)', [nombre, email, hashedPassword]);
         res.status(201).json({ message: 'Usuario registrado con éxito' });
     } catch (err) {
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ id: user.id }, 'tu_secreto', { expiresIn: '1h' });
         res.json({ auth: true, token });
     } catch (err) {
-        console.error(err); // Para depuración
+        console.error(err);
         return res.status(500).json({ message: 'Error al iniciar sesión' });
     }
 };

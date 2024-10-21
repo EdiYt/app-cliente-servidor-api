@@ -5,8 +5,10 @@ const booksDao = require('../dao/booksDao');
 async function getAllBooks(req, res) {
     try {
         const books = await booksDao.getAll();
+        console.log(books);
         res.json(books);
     } catch (err) {
+        console.error('Error al obtener los libros:', err);
         res.status(500).json({ message: 'Error al obtener los libros', error: err });
     }
 }

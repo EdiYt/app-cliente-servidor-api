@@ -1,9 +1,9 @@
-const db = require('../config/db'); // Importa la conexión a la base de datos
+const db = require('../config/db');
 
 // Obtener todos los usuarios
 exports.getUsers = async (req, res) => {
     try {
-        const [results] = await db.query('SELECT * FROM usuarios'); // Usa promesas aquí
+        const [results] = await db.query('SELECT * FROM usuarios'); 
         res.json(results);
     } catch (err) {
         console.error('Error al obtener usuarios:', err);
@@ -31,7 +31,7 @@ exports.updateUser = async (req, res) => {
     const { id } = req.params;
     const { nombre, email } = req.body;
 
-    console.log({ id, nombre, email }); // <-- Agrega esto para verificar los valores
+    console.log({ id, nombre, email }); 
 
     try {
         const [result] = await db.query('UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?', [nombre, email, id]);

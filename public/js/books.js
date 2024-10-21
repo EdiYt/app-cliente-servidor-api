@@ -16,8 +16,10 @@ function loadBooks() {
             bookTable.innerHTML = ''; 
             books.forEach(book => {
                 const row = document.createElement('tr');
-
-                const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
+                
+                const pdfLink = book.pdf_path ? `<a href="${book.pdf_path}" target="_blank">Ver PDF</a>` : 'No disponible';
+                
+                const estatus = book.estatus ? 'Disponible' : 'No disponible';
 
                 row.innerHTML = `
                     <td>${book.id}</td>
@@ -25,9 +27,10 @@ function loadBooks() {
                     <td>${book.autor}</td>
                     <td>${book.genero}</td>
                     <td>${pdfLink}</td>
+                    <td>${estatus}</td> <!-- Nueva columna de estatus -->
                     <td><button onclick="editBook(${book.id})">Actualizar</button></td>
                 `;
-                bookTable.appendChild(row); 
+                bookTable.appendChild(row);
             });
         })
         .catch(error => console.error('Error al cargar los libros:', error));

@@ -22,12 +22,12 @@ async function getById(id) {
     }
 }
 
-// Método que inserta un nuevo libro
 async function insert(book) {
-    const { nombre, autor, genero } = book; 
-    const result = await db.query('INSERT INTO libros (nombre, autor, genero) VALUES (?, ?, ?)', [nombre, autor, genero]);
+    const { nombre, autor, genero, pdf_path } = book;
+    const result = await db.query('INSERT INTO libros (nombre, autor, genero, pdf_path) VALUES (?, ?, ?, ?)', [nombre, autor, genero, pdf_path]);
     return result[0].insertId; 
 }
+
 
 // Método que actualiza los datos de un libro
 async function update(id, book) {

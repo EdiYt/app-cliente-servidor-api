@@ -34,16 +34,13 @@
             <input type="file" id="registerPdf" accept="application/pdf" required />
             
             <button type="submit">Registrar</button>
-        </form>   
-        
-        <br>
+        </form>    
 
         <h2 id="updateTitle" style="display: none;">Actualizar Libro</h2>
         <form id="updateBookForm" style="display: none;">
             <input type="hidden" id="bookId" />
             
             <h3>Actualizar Libro</h3>
-            
             <label for="name">Nombre:</label>
             <input type="text" id="name" required />
             
@@ -55,10 +52,9 @@
             
             <label for="status">Estatus:</label>
             <input type="checkbox" id="status" />
-            <br>
+            
             <button type="submit">Actualizar</button>
         </form>
-
 
         <h2>Lista de Libros</h2>
         <table id="bookTable">
@@ -68,11 +64,17 @@
                     <th>Nombre</th>
                     <th>Autor</th>
                     <th>Género</th>
+                    <th>PDF</th> 
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
+
+        <div id="pdfViewer" style="display:none; margin-top: 20px;">
+            <iframe id="pdfFrame" width="100%" height="500px"></iframe>
+        </div>
+
     </div>
 
     <script src="/public/js/books.js"></script>

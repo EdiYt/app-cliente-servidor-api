@@ -1,4 +1,5 @@
-const db = require('../config/db');
+const cloudinary = require('../config/cloudinary'); 
+const path = require('path');
 const booksDao = require('../dao/booksDao');
 
 // Obtener todos los libros
@@ -31,11 +32,43 @@ async function getBookById(req, res) {
 // Insertar un nuevo libro
 async function createBook(req, res) {
     try {
-        const { nombre, autor, genero } = req.body; // No incluimos estatus
-        const newBookId = await booksDao.insert({ nombre, autor, genero });
-        res.status(201).json({ message: 'Libro creado', bookId: newBookId });
+        const { nombre, autor, genero } = req.body;
+        let pdfUrl = null;
+
+        if (req.files && req.files.pdf) {
+            const pdfFile = req.files.pdf;
+            const filePath = pdfFile.tempFilePath || pdfFile.path;
+
+            if (!filePath) {
+                throw new Error('No se pudo obtener el path del archivo.');
+            }
+
+            console.log("Subiendo el archivo a Cloudinary...");
+            const uploadResponse = await cloudinary.uploader.upload(filePath, {
+                folder: "biblioteca_pdfs",
+                resource_type: "raw", 
+                format: "pdf",        
+                access_mode: "public" 
+            });            
+
+            pdfUrl = uploadResponse.secure_url;
+            console.log("PDF subido a Cloudinary:", pdfUrl);
+        }
+
+        console.log("Insertando el libro en la base de datos...");
+        const newBookId = await booksDao.insert({ nombre, autor, genero, pdf_path: pdfUrl });
+        
+        return res.status(201).json({
+            message: 'Libro creado',
+            bookId: newBookId,
+            nombre,
+            autor,
+            genero,
+            pdfUrl
+        });
     } catch (err) {
-        res.status(500).json({ message: 'Error al crear el libro', error: err });
+        console.error("Error al crear el libro:", err);
+        return res.status(500).json({ message: 'Error al crear el libro', error: err });
     }
 }
 

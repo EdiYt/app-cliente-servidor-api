@@ -7,9 +7,16 @@ const bookRoutes = require('./routes/bookRoutes');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
+
 app.use(express.json());
-app.use(fileUpload({ createParentPath: true }));
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: './tmp/',
+    limits: { fileSize: 5 * 1024 * 1024 } // Tamaño máximo permitido, en este caso 5MB
+}));
 
 // Rutas
 app.use('/api', authRoutes);

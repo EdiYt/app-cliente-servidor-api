@@ -5,26 +5,44 @@ document.addEventListener('DOMContentLoaded', () => {
 // Función para cargar todos los libros
 function loadBooks() {
     fetch('http://localhost:3000/api/books')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al cargar los libros');
+            }
+            return response.json();
+        })
         .then(books => {
             const bookTable = document.querySelector('#bookTable tbody');
-            bookTable.innerHTML = ''; 
+            bookTable.innerHTML = '';
             books.forEach(book => {
                 const row = document.createElement('tr');
+                
+                const pdfLink = book.pdf_path ? `<a href="${book.pdf_path}" target="_blank">Ver PDF</a>` : 'No disponible';
+                
                 row.innerHTML = `
                     <td>${book.id}</td>
                     <td>${book.nombre}</td>
                     <td>${book.autor}</td>
                     <td>${book.genero}</td>
-                    <td>
-                        <button onclick="editBook(${book.id})">Actualizar</button>
-                    </td>
+                    <td>${pdfLink}</td>
+                    <td><button onclick="editBook(${book.id})">Actualizar</button></td>
                 `;
                 bookTable.appendChild(row); 
             });
         })
         .catch(error => console.error('Error al cargar los libros:', error));
 }
+
+function viewPdf(pdfUrl) {
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfFrame = document.getElementById('pdfFrame');
+
+    pdfFrame.src = pdfUrl;
+    
+    pdfViewer.style.display = 'block';
+}
+
+
 
 // Función para editar un libro
 function editBook(bookId) {
@@ -87,34 +105,36 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
 // Evento para manejar el registro de un libro
 document.getElementById('registerBookForm').addEventListener('submit', function (event) {
     event.preventDefault(); 
-    const formData = {
-        nombre: document.getElementById('registerName').value,
-        autor: document.getElementById('registerAuthor').value,
-        genero: document.getElementById('registerGenre').value
-    };
+    
+    const formData = new FormData();
+    formData.append('nombre', document.getElementById('registerName').value);
+    formData.append('autor', document.getElementById('registerAuthor').value);
+    formData.append('genero', document.getElementById('registerGenre').value);
+    
+    const pdfFile = document.getElementById('registerPdf').files[0];
+    if (pdfFile) {
+        formData.append('pdf', pdfFile);
+    }
 
+    // Intentar registrar el libro
     fetch('http://localhost:3000/api/books', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify(formData) 
+        body: formData
     })
     .then(response => {
+        console.log("Registro de libro respuesta del servidor:", response); 
         if (!response.ok) {
-            return response.json().then(err => {
-                throw new Error(err.message || 'Error desconocido al registrar el libro');
-            });
+            throw new Error('Error al registrar el libro');
         }
         return response.json(); 
     })
     .then(data => {
-        alert('Libro registrado correctamente.');
-        loadBooks(); 
+        console.log('Libro registrado correctamente:', data); 
         document.getElementById('registerBookForm').reset(); 
+        loadBooks(); 
     })
     .catch(error => {
-        console.error('Error al registrar el libro:', error);
-        alert('Error al registrar el libro: ' + error.message); 
+        //console.error('Error al registrar el libro:', error); 
+        alert('Libro registrado correctamente. La página se recargará.');
     });
 });

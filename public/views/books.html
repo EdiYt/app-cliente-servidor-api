@@ -34,13 +34,16 @@
             <input type="file" id="registerPdf" accept="application/pdf" required />
             
             <button type="submit">Registrar</button>
-        </form>    
+        </form>   
+        
+        <br>
 
         <h2 id="updateTitle" style="display: none;">Actualizar Libro</h2>
         <form id="updateBookForm" style="display: none;">
             <input type="hidden" id="bookId" />
             
             <h3>Actualizar Libro</h3>
+            
             <label for="name">Nombre:</label>
             <input type="text" id="name" required />
             
@@ -50,8 +53,12 @@
             <label for="genre">Género:</label>
             <input type="text" id="genre" required />
             
+            <label for="status">Estatus:</label>
+            <input type="checkbox" id="status" />
+            <br>
             <button type="submit">Actualizar</button>
         </form>
+
 
         <h2>Lista de Libros</h2>
         <table id="bookTable">

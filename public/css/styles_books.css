@@ -124,3 +124,10 @@ nav ul li a:hover {
     background-color: #4CAF50;
     color: white;
 }
+
+#pdfViewer {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    display: none; 
+}

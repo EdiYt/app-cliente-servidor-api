@@ -13,12 +13,12 @@ function loadBooks() {
         })
         .then(books => {
             const bookTable = document.querySelector('#bookTable tbody');
-            bookTable.innerHTML = '';
+            bookTable.innerHTML = ''; 
             books.forEach(book => {
                 const row = document.createElement('tr');
-                
-                const pdfLink = book.pdf_path ? `<a href="${book.pdf_path}" target="_blank">Ver PDF</a>` : 'No disponible';
-                
+
+                const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
+
                 row.innerHTML = `
                     <td>${book.id}</td>
                     <td>${book.nombre}</td>
@@ -41,8 +41,6 @@ function viewPdf(pdfUrl) {
     
     pdfViewer.style.display = 'block';
 }
-
-
 
 // Función para editar un libro
 function editBook(bookId) {

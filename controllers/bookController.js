@@ -1,6 +1,9 @@
 const cloudinary = require('../config/cloudinary'); 
 const path = require('path');
 const booksDao = require('../dao/booksDao');
+const CQRSLibro = require('../cqrs/CQRSLibro');
+const fs = require('fs');
+const cqrsLibro = new CQRSLibro();
 
 // Obtener todos los libros
 async function getAllBooks(req, res) {
@@ -29,7 +32,7 @@ async function getBookById(req, res) {
     }
 }
 
-// Insertar un nuevo libro
+// Insertar un libro
 async function createBook(req, res) {
     try {
         const { nombre, autor, genero } = req.body;
@@ -39,26 +42,21 @@ async function createBook(req, res) {
             const pdfFile = req.files.pdf;
             const filePath = pdfFile.tempFilePath || pdfFile.path;
 
-            if (!filePath) {
-                throw new Error('No se pudo obtener el path del archivo.');
-            }
-
-            console.log("Subiendo el archivo a Cloudinary...");
             const uploadResponse = await cloudinary.uploader.upload(filePath, {
                 folder: "biblioteca_pdfs",
-                resource_type: "raw", 
-                format: "pdf",        
-                access_mode: "public" 
-            });            
+                resource_type: "raw",
+                format: "pdf"
+            });
 
             pdfUrl = uploadResponse.secure_url;
-            console.log("PDF subido a Cloudinary:", pdfUrl);
+            fs.unlink(filePath, (err) => {
+                if (err) console.error('Error al eliminar el archivo temporal:', err);
+            });
         }
 
-        console.log("Insertando el libro en la base de datos...");
-        const newBookId = await booksDao.insert({ nombre, autor, genero, pdf_path: pdfUrl });
-        
-        return res.status(201).json({
+        const newBookId = await cqrsLibro.insert(nombre, autor, genero, pdfUrl);
+
+        res.status(201).json({
             message: 'Libro creado',
             bookId: newBookId,
             nombre,
@@ -67,24 +65,22 @@ async function createBook(req, res) {
             pdfUrl
         });
     } catch (err) {
-        console.error("Error al crear el libro:", err);
-        return res.status(500).json({ message: 'Error al crear el libro', error: err });
+        res.status(400).json({ message: err.message });
     }
 }
 
 // Actualizar un libro
 async function updateBook(req, res) {
     try {
-        const id = req.params.id;
-        const { nombre, autor, genero, estatus } = req.body; 
-        const affectedRows = await booksDao.update(id, { nombre, autor, genero, estatus });
-        if (affectedRows > 0) {
-            res.json({ message: 'Libro actualizado' });
-        } else {
-            res.status(404).json({ message: 'Libro no encontrado' });
-        }
+        const { id } = req.params;
+        const { nombre, autor, genero, estatus } = req.body;
+
+        // Llamada a CQRS para actualizar el libro
+        await cqrsLibro.update(id, nombre, autor, genero, estatus);
+
+        res.json({ message: 'Libro actualizado' });
     } catch (err) {
-        res.status(500).json({ message: 'Error al actualizar el libro', error: err });
+        res.status(400).json({ message: err.message });
     }
 }
 

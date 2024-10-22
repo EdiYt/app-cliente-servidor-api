@@ -75,10 +75,12 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
     const genre = document.getElementById('genre').value;
     const status = document.getElementById('status').checked;
 
+    console.log('Datos a enviar:', { name, author, genre, status });
+
     fetch(`http://localhost:3000/api/books/${bookId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             nombre: name,
@@ -117,13 +119,11 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
         formData.append('pdf', pdfFile);
     }
 
-    // Intentar registrar el libro
     fetch('http://localhost:3000/api/books', {
         method: 'POST',
         body: formData
     })
     .then(response => {
-        console.log("Registro de libro respuesta del servidor:", response); 
         if (!response.ok) {
             throw new Error('Error al registrar el libro');
         }
@@ -131,11 +131,11 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
     })
     .then(data => {
         console.log('Libro registrado correctamente:', data); 
-        document.getElementById('registerBookForm').reset(); 
+        document.getElementById('registerBookForm').reset();
         loadBooks(); 
     })
     .catch(error => {
-        //console.error('Error al registrar el libro:', error); 
-        alert('Libro registrado correctamente.');
+        console.error('Error al registrar el libro:', error); 
+        alert('Libro registrado correctamente');
     });
 });

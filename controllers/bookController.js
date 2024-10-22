@@ -42,21 +42,27 @@ async function createBook(req, res) {
             const pdfFile = req.files.pdf;
             const filePath = pdfFile.tempFilePath || pdfFile.path;
 
+            if (!filePath) {
+                throw new Error('No se pudo obtener el path del archivo.');
+            }
+
+            console.log("Subiendo el archivo a Cloudinary...");
             const uploadResponse = await cloudinary.uploader.upload(filePath, {
                 folder: "biblioteca_pdfs",
-                resource_type: "raw",
-                format: "pdf"
-            });
+                resource_type: "raw", 
+                format: "pdf",        
+                access_mode: "public" 
+            });            
 
             pdfUrl = uploadResponse.secure_url;
-            fs.unlink(filePath, (err) => {
-                if (err) console.error('Error al eliminar el archivo temporal:', err);
-            });
+            console.log("PDF subido a Cloudinary:", pdfUrl);
         }
 
-        const newBookId = await cqrsLibro.insert(nombre, autor, genero, pdfUrl);
+        console.log("Insertando el libro en la base de datos..."); 
+        const newBookId = await booksDao.insert({ nombre, autor, genero, pdf_path: pdfUrl });
+        console.log('Nuevo libro insertado con ID:', newBookId); 
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Libro creado',
             bookId: newBookId,
             nombre,
@@ -65,22 +71,25 @@ async function createBook(req, res) {
             pdfUrl
         });
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        console.error("Error al crear el libro:", err);
+        return res.status(500).json({ message: 'Error al crear el libro', error: err });
     }
 }
 
 // Actualizar un libro
 async function updateBook(req, res) {
     try {
-        const { id } = req.params;
-        const { nombre, autor, genero, estatus } = req.body;
-
-        // Llamada a CQRS para actualizar el libro
-        await cqrsLibro.update(id, nombre, autor, genero, estatus);
-
-        res.json({ message: 'Libro actualizado' });
+        const id = req.params.id;
+        const { nombre, autor, genero, estatus } = req.body; 
+        console.log('Datos recibidos para actualizar:', { nombre, autor, genero, estatus });
+        const affectedRows = await booksDao.update(id, { nombre, autor, genero, estatus });
+        if (affectedRows > 0) {
+            res.json({ message: 'Libro actualizado' });
+        } else {
+            res.status(404).json({ message: 'Libro no encontrado' });
+        }
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(500).json({ message: 'Error al actualizar el libro', error: err });
     }
 }
 

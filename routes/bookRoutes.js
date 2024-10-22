@@ -8,6 +8,9 @@ router.get('/', bookController.getAllBooks);
 // Ruta para obtener un libro por ID
 router.get('/:id', bookController.getBookById);
 
+// GetAll publico
+router.get('/publico', bookController.getAllPublico);
+
 // Ruta para crear un nuevo libro
 router.post('/', bookController.createBook);
 

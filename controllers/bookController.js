@@ -32,7 +32,7 @@ async function getBookById(req, res) {
     }
 }
 
-// Insertar un libro
+// Insertamos un libro
 async function createBook(req, res) {
     try {
         const { nombre, autor, genero } = req.body;
@@ -56,12 +56,19 @@ async function createBook(req, res) {
 
             pdfUrl = uploadResponse.secure_url;
             console.log("PDF subido a Cloudinary:", pdfUrl);
+
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Error al eliminar el archivo temporal:', err);
+                } else {
+                    console.log('Archivo temporal eliminado:', filePath);
+                }
+            });
         }
 
-        console.log("Insertando el libro en la base de datos..."); 
+        console.log("Insertando el libro en la base de datos...");
         const newBookId = await booksDao.insert({ nombre, autor, genero, pdf_path: pdfUrl });
-        console.log('Nuevo libro insertado con ID:', newBookId); 
-
+        
         return res.status(201).json({
             message: 'Libro creado',
             bookId: newBookId,
@@ -93,8 +100,29 @@ async function updateBook(req, res) {
     }
 }
 
+// Get All publico
+async function getAllPublico(req, res) {
+    try {
+        const books = await booksDao.getAll();
+        // Modificamos los nombres de las propiedades
+        const modifiedBooks = books.map(book => ({
+            bookId: book.id,
+            titulo: book.nombre,
+            escritor: book.autor,
+            categoria: book.genero,
+            pdfLink: book.pdf_path,
+            disponibilidad: book.estatus
+        }));
+        res.json(modifiedBooks);
+    } catch (err) {
+        console.error('Error al obtener los libros públicos:', err);
+        res.status(500).json({ message: 'Error al obtener los libros' });
+    }
+}
+
 module.exports = {
     getAllBooks,
+    getAllPublico,
     getBookById,
     createBook,
     updateBook,

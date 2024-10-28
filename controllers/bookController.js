@@ -1,9 +1,7 @@
 const cloudinary = require('../config/cloudinary'); 
 const path = require('path');
 const booksDao = require('../dao/booksDao');
-const CQRSLibro = require('../cqrs/CQRSLibro');
 const fs = require('fs');
-const cqrsLibro = new CQRSLibro();
 
 // Obtener todos los libros
 async function getAllBooks(req, res) {

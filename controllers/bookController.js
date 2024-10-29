@@ -2,6 +2,8 @@ const cloudinary = require('../config/cloudinary');
 const path = require('path');
 const booksDao = require('../dao/booksDao');
 const fs = require('fs');
+const LibrosExternosAppService = require('../appService/librosExternosAppService');
+const librosExternosService = new LibrosExternosAppService();
 
 // Obtener todos los libros
 async function getAllBooks(req, res) {
@@ -118,9 +120,29 @@ async function getAllPublico(req, res) {
     }
 }
 
+// Get All publico hacia Oscar
+async function getAllBooksPublicTodo(req, res) {
+    try {
+        const librosExternos = await librosExternosService.fetchLibrosExternos();
+
+        const librosPropios = await booksDao.getAll(); 
+
+        const allBooks = {
+            externos: librosExternos,
+            propios: librosPropios
+        };
+
+        res.json(allBooks);
+    } catch (error) {
+        console.error('Error al cargar libros:', error);
+        res.status(500).json({ error: 'Error al cargar libros' });
+    }
+}
+
 module.exports = {
     getAllBooks,
     getAllPublico,
+    getAllBooksPublicTodo,
     getBookById,
     createBook,
     updateBook,

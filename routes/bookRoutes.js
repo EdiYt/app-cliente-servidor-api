@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bookController = require('../controllers/bookController');
 
+// Ruta para obtener libros de ambas fuentes
+router.get('/all', bookController.getAllBooksPublicTodo); 
+
 // Ruta para obtener todos los libros con nombres modificados (getAllPublico)
 router.get('/publico', bookController.getAllPublico);
 

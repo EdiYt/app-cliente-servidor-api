@@ -38,6 +38,8 @@ async function createBook(req, res) {
         const { nombre, autor, genero } = req.body;
         let pdfUrl = null;
 
+        console.log('Datos del libro a registrar:', { nombre, autor, genero });
+
         if (req.files && req.files.pdf) {
             const pdfFile = req.files.pdf;
             const filePath = pdfFile.tempFilePath || pdfFile.path;
@@ -69,6 +71,8 @@ async function createBook(req, res) {
         console.log("Insertando el libro en la base de datos...");
         const newBookId = await booksDao.insert({ nombre, autor, genero, pdf_path: pdfUrl });
         
+        console.log(`Libro creado con ID: ${newBookId}`); 
+        
         return res.status(201).json({
             message: 'Libro creado',
             bookId: newBookId,
@@ -78,25 +82,44 @@ async function createBook(req, res) {
             pdfUrl
         });
     } catch (err) {
-        console.error("Error al crear el libro:", err);
+        console.error("Error al crear el libro:", err); 
         return res.status(500).json({ message: 'Error al crear el libro', error: err });
     }
 }
 
 // Actualizar un libro
 async function updateBook(req, res) {
+    const { id } = req.params;
+    const { nombre, autor, genero } = req.body;
+
+    const originalBook = await booksDao.getById(id);
+
+    if (!originalBook) {
+        console.warn(`No se encontró el libro con ID: ${id}`); 
+        return res.status(404).json({ error: 'Libro no encontrado' });
+    }
+
+    console.log(`Datos originales del libro con ID: ${id}`, { 
+        nombre: originalBook.nombre, 
+        autor: originalBook.autor, 
+        genero: originalBook.genero 
+    });
+
+    console.log(`Nuevos datos del libro:`, { nombre, autor, genero });
+
     try {
-        const id = req.params.id;
-        const { nombre, autor, genero, estatus } = req.body; 
-        console.log('Datos recibidos para actualizar:', { nombre, autor, genero, estatus });
-        const affectedRows = await booksDao.update(id, { nombre, autor, genero, estatus });
+        const affectedRows = await booksDao.update(id, { nombre, autor, genero });
+        
         if (affectedRows > 0) {
-            res.json({ message: 'Libro actualizado' });
+            console.log(`Libro ${id} actualizado con éxito:`, { nombre, autor, genero }); 
+            res.json({ message: 'Libro actualizado exitosamente' });
         } else {
-            res.status(404).json({ message: 'Libro no encontrado' });
+            console.warn(`No se encontró el libro con ID: ${id}`); 
+            res.status(404).json({ error: 'Libro no encontrado' });
         }
     } catch (err) {
-        res.status(500).json({ message: 'Error al actualizar el libro', error: err });
+        console.error('Error al actualizar el libro:', err); 
+        return res.status(500).json({ error: 'Error al actualizar el libro' });
     }
 }
 

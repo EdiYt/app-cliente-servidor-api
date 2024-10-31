@@ -19,7 +19,7 @@ async function insert(user) {
         'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)',
         [nombre, email, password]
     );
-    return result[0].insertId;
+    return result.insertId; 
 }
 
 // Actualizar un usuario
@@ -32,8 +32,15 @@ async function update(id, user) {
     return result.affectedRows;
 }
 
+// Obtener el usuario por email
+async function getByEmail(email) {
+    const [rows] = await db.query('SELECT * FROM usuarios WHERE email = ?', [email]);
+    return rows[0];
+}
+
 module.exports = {
     getAll,
+    getByEmail,
     getById,
     insert,
     update,

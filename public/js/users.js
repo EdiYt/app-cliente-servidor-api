@@ -36,10 +36,10 @@ function editUser(userId) {
             if (!response.ok) {
                 throw new Error('Usuario no encontrado');
             }
-            return response.json(); 
+            return response.json();
         })
         .then(user => {
-            document.getElementById('userId').value = user.id; 
+            document.getElementById('userId').value = user.id;
             document.getElementById('name').value = user.nombre;
             document.getElementById('email').value = user.email;
 
@@ -50,7 +50,7 @@ function editUser(userId) {
 
 // Función para ocultar el formulario de actualización
 function hideUpdateForm() {
-    document.getElementById('updateSection').style.display = 'none'; 
+    document.getElementById('updateSection').style.display = 'none';
 }
 
 // Evento para manejar la actualización de un usuario
@@ -65,20 +65,18 @@ document.getElementById('updateUserForm').addEventListener('submit', function (e
         return;
     }
 
-    console.log({ userId, name, email }); 
-
     fetch(`http://localhost:3000/api/users/${userId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ nombre: name, email: email }) 
+        body: JSON.stringify({ nombre: name, email: email })
     })
     .then(response => {
         if (response.ok) {
             alert('Usuario actualizado correctamente.');
-            loadUsers(); 
-            hideUpdateForm(); 
+            loadUsers();
+            hideUpdateForm();
         } else {
             alert('Error al actualizar el usuario.');
         }

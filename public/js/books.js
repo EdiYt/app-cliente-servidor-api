@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadBooks(); 
+    loadBooks();
 });
 
 // Función para cargar todos los libros
@@ -13,12 +13,10 @@ function loadBooks() {
         })
         .then(books => {
             const bookTable = document.querySelector('#bookTable tbody');
-            bookTable.innerHTML = ''; 
+            bookTable.innerHTML = '';
             books.forEach(book => {
                 const row = document.createElement('tr');
-
                 const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
-
                 const estatus = book.estatus ? 'Disponible' : 'No disponible';
 
                 row.innerHTML = `
@@ -30,7 +28,7 @@ function loadBooks() {
                     <td>${pdfLink}</td>
                     <td><button onclick="editBook(${book.id})">Actualizar</button></td>
                 `;
-                bookTable.appendChild(row); 
+                bookTable.appendChild(row);
             });
         })
         .catch(error => console.error('Error al cargar los libros:', error));
@@ -41,8 +39,8 @@ function viewPdf(pdfUrl) {
     const pdfViewer = document.getElementById('pdfViewer');
     const pdfFrame = document.getElementById('pdfFrame');
 
-    pdfFrame.src = pdfUrl; 
-    pdfViewer.style.display = 'block'; 
+    pdfFrame.src = pdfUrl;
+    pdfViewer.style.display = 'block';
 }
 
 // Función para editar un libro
@@ -61,21 +59,19 @@ function editBook(bookId) {
             document.getElementById('genre').value = book.genero;
             document.getElementById('status').checked = book.estatus;
 
-            document.getElementById('updateBookForm').style.display = 'block'; 
+            document.getElementById('updateBookForm').style.display = 'block';
         })
         .catch(error => console.error('Error al cargar el libro:', error));
 }
 
 // Evento para manejar la actualización de un libro
 document.getElementById('updateBookForm').addEventListener('submit', function (event) {
-    event.preventDefault(); 
+    event.preventDefault();
     const bookId = document.getElementById('bookId').value;
     const name = document.getElementById('name').value;
     const author = document.getElementById('author').value;
     const genre = document.getElementById('genre').value;
     const status = document.getElementById('status').checked;
-
-    console.log('Datos a enviar:', { name, author, genre, status });
 
     fetch(`http://localhost:3000/api/books/${bookId}`, {
         method: 'PUT',
@@ -92,9 +88,9 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
     .then(response => {
         if (response.ok) {
             alert('Libro actualizado correctamente.');
-            loadBooks(); 
-            document.getElementById('updateBookForm').reset(); 
-            document.getElementById('updateBookForm').style.display = 'none'; 
+            loadBooks();
+            document.getElementById('updateBookForm').reset();
+            document.getElementById('updateBookForm').style.display = 'none';
         } else {
             alert('Error al actualizar el libro.');
         }
@@ -107,13 +103,13 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
 
 // Evento para manejar el registro de un libro
 document.getElementById('registerBookForm').addEventListener('submit', function (event) {
-    event.preventDefault(); 
-    
+    event.preventDefault();
+
     const formData = new FormData();
     formData.append('nombre', document.getElementById('registerName').value);
     formData.append('autor', document.getElementById('registerAuthor').value);
     formData.append('genero', document.getElementById('registerGenre').value);
-    
+
     const pdfFile = document.getElementById('registerPdf').files[0];
     if (pdfFile) {
         formData.append('pdf', pdfFile);
@@ -127,15 +123,15 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
         if (!response.ok) {
             throw new Error('Error al registrar el libro');
         }
-        return response.json(); 
+        return response.json();
     })
     .then(data => {
-        console.log('Libro registrado correctamente:', data); 
+        console.log('Libro registrado correctamente:', data);
         document.getElementById('registerBookForm').reset();
-        loadBooks(); 
+        loadBooks();
     })
     .catch(error => {
-        console.error('Error al registrar el libro:', error); 
-        alert('Libro registrado correctamente');
+        console.error('Error al registrar el libro:', error);
+        alert('Error al registrar el libro: ' + error.message);
     });
 });

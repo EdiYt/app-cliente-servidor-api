@@ -28,7 +28,7 @@ app.use('/api/books', bookRoutes);
 // Manejo de errores
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Algo salió mal!');
+    res.status(500).json({ message: 'Algo salió mal', error: err.message });
 });
 
 // Se inicia el servidor

@@ -44,17 +44,13 @@ async function createBook(req, res) {
             const pdfFile = req.files.pdf;
             const filePath = pdfFile.tempFilePath || pdfFile.path;
 
-            if (!filePath) {
-                throw new Error('No se pudo obtener el path del archivo.');
-            }
-
             console.log("Subiendo el archivo a Cloudinary...");
             const uploadResponse = await cloudinary.uploader.upload(filePath, {
                 folder: "biblioteca_pdfs",
-                resource_type: "raw", 
-                format: "pdf",        
-                access_mode: "public" 
-            });            
+                resource_type: "raw",
+                format: "pdf",
+                access_mode: "public"
+            });
 
             pdfUrl = uploadResponse.secure_url;
             console.log("PDF subido a Cloudinary:", pdfUrl);
@@ -70,9 +66,10 @@ async function createBook(req, res) {
 
         console.log("Insertando el libro en la base de datos...");
         const newBookId = await booksDao.insert({ nombre, autor, genero, pdf_path: pdfUrl });
-        
-        console.log(`Libro creado con ID: ${newBookId}`); 
-        
+
+        console.log(`Libro creado con ID: ${newBookId}`);
+
+        console.log('Enviando respuesta de éxito al cliente...');
         return res.status(201).json({
             message: 'Libro creado',
             bookId: newBookId,
@@ -82,43 +79,37 @@ async function createBook(req, res) {
             pdfUrl
         });
     } catch (err) {
-        console.error("Error al crear el libro:", err); 
-        return res.status(500).json({ message: 'Error al crear el libro', error: err });
+        console.error("Error al crear el libro:", err);
+        return res.status(500).json({ message: 'Error al crear el libro', error: err.message });
     }
 }
 
 // Actualizar un libro
 async function updateBook(req, res) {
     const { id } = req.params;
-    const { nombre, autor, genero } = req.body;
+    const { nombre, autor, genero, estatus } = req.body; 
 
     const originalBook = await booksDao.getById(id);
 
     if (!originalBook) {
-        console.warn(`No se encontró el libro con ID: ${id}`); 
+        console.warn(`No se encontró el libro con ID: ${id}`);
         return res.status(404).json({ error: 'Libro no encontrado' });
     }
 
-    console.log(`Datos originales del libro con ID: ${id}`, { 
-        nombre: originalBook.nombre, 
-        autor: originalBook.autor, 
-        genero: originalBook.genero 
-    });
-
-    console.log(`Nuevos datos del libro:`, { nombre, autor, genero });
+    console.log(`Nuevos datos del libro:`, { nombre, autor, genero, estatus });
 
     try {
-        const affectedRows = await booksDao.update(id, { nombre, autor, genero });
+        const affectedRows = await booksDao.update(id, { nombre, autor, genero, estatus });
         
         if (affectedRows > 0) {
-            console.log(`Libro ${id} actualizado con éxito:`, { nombre, autor, genero }); 
+            console.log(`Libro ${id} actualizado con éxito:`, { nombre, autor, genero, estatus });
             res.json({ message: 'Libro actualizado exitosamente' });
         } else {
-            console.warn(`No se encontró el libro con ID: ${id}`); 
+            console.warn(`No se encontró el libro con ID: ${id}`);
             res.status(404).json({ error: 'Libro no encontrado' });
         }
     } catch (err) {
-        console.error('Error al actualizar el libro:', err); 
+        console.error('Error al actualizar el libro:', err);
         return res.status(500).json({ error: 'Error al actualizar el libro' });
     }
 }

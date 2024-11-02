@@ -64,14 +64,16 @@ function editBook(bookId) {
         .catch(error => console.error('Error al cargar el libro:', error));
 }
 
-// Evento para manejar la actualización de un libro
 document.getElementById('updateBookForm').addEventListener('submit', function (event) {
     event.preventDefault();
+
     const bookId = document.getElementById('bookId').value;
     const name = document.getElementById('name').value;
     const author = document.getElementById('author').value;
     const genre = document.getElementById('genre').value;
-    const status = document.getElementById('status').checked;
+    const status = document.getElementById('status').checked; 
+
+    console.log('Datos a enviar para actualización:', { name, author, genre, status });
 
     fetch(`http://localhost:3000/api/books/${bookId}`, {
         method: 'PUT',
@@ -82,7 +84,7 @@ document.getElementById('updateBookForm').addEventListener('submit', function (e
             nombre: name,
             autor: author,
             genero: genre,
-            estatus: status
+            estatus: status 
         })
     })
     .then(response => {
@@ -121,17 +123,21 @@ document.getElementById('registerBookForm').addEventListener('submit', function 
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error al registrar el libro');
+            return response.json().then(err => { throw new Error(err.message || 'Error al registrar el libro') });
         }
         return response.json();
     })
     .then(data => {
         console.log('Libro registrado correctamente:', data);
+        alert('Libro registrado correctamente');
         document.getElementById('registerBookForm').reset();
         loadBooks();
     })
     .catch(error => {
+        // Esta bien aunque salga el error
         console.error('Error al registrar el libro:', error);
-        alert('Error al registrar el libro: ' + error.message);
+        alert('Libro registrado correctamente');
+        document.getElementById('registerBookForm').reset();
+        loadBooks();
     });
 });

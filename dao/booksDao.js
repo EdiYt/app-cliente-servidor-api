@@ -22,7 +22,10 @@ async function insert(book) {
 // Método que actualiza los datos de un libro
 async function update(id, book) {
     const { nombre, autor, genero, estatus } = book; 
-    const result = await db.query('UPDATE libros SET nombre = ?, autor = ?, genero = ?, estatus = ? WHERE id = ?', [nombre, autor, genero, estatus, id]);
+    const result = await db.query(
+        'UPDATE libros SET nombre = ?, autor = ?, genero = ?, estatus = ? WHERE id = ?',
+        [nombre, autor, genero, estatus, id]
+    );
     return result[0].affectedRows; 
 }
 

@@ -18,8 +18,14 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            alert('Inicio de sesión exitoso');
-            window.location.href = 'users.html';
+            // Verifica que data.user esté definido antes de acceder a sus propiedades
+            if (data.user && data.user.rol === 'alumno') {
+                window.location.href = 'alumno.html'; // Redirige a la pantalla específica para alumnos
+            } else if (data.user) {
+                window.location.href = 'admin.html'; // Ejemplo para otro rol
+            } else {
+                alert('Error al obtener los datos del usuario');
+            }
         } else {
             alert(data.message);
         }

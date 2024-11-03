@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/styles_books.css">
+    <title>Catálogo de Libros</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Catálogo de Libros</h1>
+
+        <!-- Buscador de libros -->
+        <input type="text" id="searchInput" placeholder="Buscar por nombre, autor o género" oninput="filterBooks()" />
+
+        <!-- Lista de Libros -->
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Autor</th>
+                    <th>Género</th>
+                    <th>Estatus</th>
+                    <th>PDF</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script src="/public/js/alumno.js"></script>
+</body>
+</html>

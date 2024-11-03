@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Función para cargar todos los libros
 function loadBooks() {
-    fetch('http://localhost:3000/api/books/publico')
+    fetch('http://localhost:3000/api/books/publico')//Cambiar esta ruta hacia el "/all" para que ahora traiga los libros de los demas
         .then(response => response.json())
         .then(books => {
             const bookTable = document.querySelector('#bookTable tbody');
@@ -73,4 +73,12 @@ function viewPdf(pdfUrl) {
         pdfViewer.style.display = 'block';
         currentPdfUrl = pdfUrl; 
     }
+}
+
+// Función de cierre de sesión
+function logout() {
+    localStorage.removeItem('token');  
+    sessionStorage.removeItem('token'); 
+
+    window.location.href = 'index.html';
 }

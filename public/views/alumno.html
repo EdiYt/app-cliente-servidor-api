@@ -8,28 +8,35 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Catálogo de Libros</h1>
+    <div class="header-container">
+        <h1 class="main-title">Catálogo de Libros</h1>
+        <button class="logout-button" onclick="logout()">Cerrar sesión</button>
+    </div>
 
-        <!-- Buscador de libros -->
-        <input type="text" id="searchInput" placeholder="Buscar por nombre, autor o género" oninput="filterBooks()" />
+    <div class="page-container">
+        <div class="container">
+            <label for="searchInput" class="search-label">Buscador de libros:</label>
+            <!-- Buscador de libros -->
+            <input type="text" id="searchInput" placeholder="Nombre, autor o género" oninput="filterBooks()" />
 
-        <!-- Lista de Libros -->
-        <table id="bookTable">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Autor</th>
-                    <th>Género</th>
-                    <th>Estatus</th>
-                    <th>PDF</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+            <!-- Lista de Libros -->
+            <table id="bookTable">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Autor</th>
+                        <th>Género</th>
+                        <th>Estatus</th>
+                        <th>PDF</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
 
-        <div id="pdfViewer" style="display: none; margin-top: 20px;">
-            <iframe id="pdfFrame" width="100%" height="600px"></iframe>
+            <!-- iframe para mostrar el PDF -->
+            <div id="pdfViewer" style="display: none; margin-top: 20px;">
+                <iframe id="pdfFrame" width="100%" height="600px"></iframe>
+            </div>
         </div>
     </div>
 

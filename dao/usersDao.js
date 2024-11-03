@@ -14,10 +14,10 @@ async function getById(id) {
 
 // Insertar un nuevo usuario
 async function insert(user) {
-    const { nombre, email, password } = user;
+    const { nombre, email, password, rol } = user;
     const [result] = await db.query(
-        'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)',
-        [nombre, email, password]
+        'INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)',
+        [nombre, email, password, rol]
     );
     return result.insertId; 
 }

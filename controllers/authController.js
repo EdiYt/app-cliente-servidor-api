@@ -13,9 +13,11 @@ exports.register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        const rol = 'alumno'; 
+
         console.log('Datos del usuario a registrar:', { nombre, email, password });
 
-        await usersDao.insert({ nombre, email, password: hashedPassword });
+        await usersDao.insert({ nombre, email, password: hashedPassword, rol });
         
         console.log(`Usuario registrado con éxito: ${nombre}, ${email}, ${hashedPassword}`);
         return res.status(201).json({ message: 'Usuario registrado con éxito' });

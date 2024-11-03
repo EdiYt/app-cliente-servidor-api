@@ -4,16 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Función para cargar todos los libros
 function loadBooks() {
-    fetch('http://localhost:3000/api/books/publico') // Asegúrate de que esta ruta solo devuelva libros públicos
+    fetch('http://localhost:3000/api/books/publico')
         .then(response => response.json())
         .then(books => {
             const bookTable = document.querySelector('#bookTable tbody');
-            bookTable.innerHTML = ''; // Limpia la tabla antes de agregar nuevos libros
+            bookTable.innerHTML = ''; 
             books.forEach(book => {
-                const row = document.createElement('tr');
-                const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
-                const estatus = book.estatus ? 'Disponible' : 'No disponible';
+                const estatus = book.disponibilidad ? 'Disponible' : 'No disponible';
+                
+                const pdfLink = book.pdfLink
+                    ? `<button onclick="viewPdf('${book.pdfLink}')">Ver</button>`
+                    : 'No disponible';
 
+                const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${book.titulo}</td>
                     <td>${book.escritor}</td>
@@ -44,4 +47,30 @@ function filterBooks() {
 // Función para mostrar el PDF en una nueva pestaña
 function viewPdf(pdfUrl) {
     window.open(pdfUrl, '_blank');
+}
+
+// Función para mostrar el PDF en el iframe
+function viewPdf(pdfUrl) {
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfFrame = document.getElementById('pdfFrame');
+
+    pdfFrame.src = pdfUrl;
+    pdfViewer.style.display = 'block'; 
+}
+
+let currentPdfUrl = null;
+
+function viewPdf(pdfUrl) {
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfFrame = document.getElementById('pdfFrame');
+
+    if (pdfViewer.style.display === 'block' && pdfFrame.src === pdfUrl) {
+        pdfViewer.style.display = 'none';
+        pdfFrame.src = ''; 
+        currentPdfUrl = null; 
+    } else {
+        pdfFrame.src = pdfUrl;
+        pdfViewer.style.display = 'block';
+        currentPdfUrl = pdfUrl; 
+    }
 }

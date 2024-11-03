@@ -48,7 +48,6 @@ exports.login = async (req, res) => {
 
         const token = jwt.sign({ id: user.id }, 'tu_secreto', { expiresIn: '1h' });
         
-        // Incluye el rol y otros datos necesarios en la respuesta
         res.json({ auth: true, token, user: { id: user.id, rol: user.rol, nombre: user.nombre, email: user.email } });
         console.log(`Usuario ${email} ha iniciado sesión correctamente.`); 
     } catch (err) {

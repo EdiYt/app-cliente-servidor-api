@@ -20,12 +20,14 @@ body {
 
 .main-title {
     font-size: 3em;
-    color: #000; 
-    margin: 0;
+    color: #000;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .logout-button {
-    position: absolute; 
+    position: absolute;
+    top: 20px;
     right: 20px;
     padding: 10px 15px;
     background-color: #e74c3c;
@@ -48,17 +50,18 @@ body {
     justify-content: flex-start;
     width: 100%;
     max-width: 1200px;
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .container {
-    width: 80%;
+    width: 90%;
     max-width: 800px;
     background-color: #ffffff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .search-label {
@@ -88,7 +91,7 @@ table {
 th, td {
     padding: 15px;
     border: 1px solid #ddd;
-    text-align: left;
+    text-align: center;
     font-size: 1em;
 }
 
@@ -114,9 +117,7 @@ tr:hover {
 }
 
 td button {
-    display: block;
-    margin: 0 auto;
-    padding: 8px 16px;
+    padding: 8px 12px;
     font-size: 0.9em;
     background-color: #4CAF50;
     color: white;
@@ -138,4 +139,133 @@ td button:hover {
     max-width: 800px;
     display: none;
     border-radius: 8px;
+}
+
+#registerBookForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#registerBookForm label {
+    flex: 1 1 100%;
+    text-align: left;
+    font-weight: bold;
+}
+
+#registerBookForm input[type="text"],
+#registerBookForm input[type="file"] {
+    flex: 1 1 calc(33.33% - 20px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#registerBookForm button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    flex: 1 1 100%;
+}
+
+#registerBookForm button:hover {
+    background-color: #45a049;
+}
+
+/* Contenedor del formulario de edición */
+#editBookFormContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Título del formulario de edición */
+#editBookFormContainer h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los labels y campos de entrada */
+#editBookForm label {
+    display: block;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+#editBookForm input[type="text"],
+#editBookForm select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Botones de actualizar y cancelar */
+#editBookForm button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    margin: 10px 5px 0;
+}
+
+#editBookForm button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#editBookForm button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+#editBookForm button[type="button"] {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#editBookForm button[type="button"]:hover {
+    background-color: #c0392b;
+}
+
+/* Alineación del formulario */
+#editBookForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 600px;
+    width: 100%;
+}
+
+#editBookForm label, #editBookForm input[type="text"], #editBookForm select {
+    flex: 1 1 48%; /* Hace que los elementos ocupen la mitad del ancho del contenedor */
+}
+
+#editBookForm button {
+    flex: 1 1 48%; /* Hace que los botones ocupen la mitad del ancho del contenedor */
+    margin-top: 10px;
 }

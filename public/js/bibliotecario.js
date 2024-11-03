@@ -4,6 +4,33 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editBookForm').addEventListener('submit', updateBook);
 });
 
+// Función para registrar un nuevo libro
+function registerBook(event) {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('nombre', document.getElementById('registerName').value);
+    formData.append('autor', document.getElementById('registerAuthor').value);
+    formData.append('genero', document.getElementById('registerGenre').value);
+    const pdfFile = document.getElementById('registerPdf').files[0];
+    if (pdfFile) formData.append('pdf', pdfFile);
+
+    fetch('http://localhost:3000/api/books', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Libro registrado correctamente');
+            loadBooks(); 
+            document.getElementById('registerBookForm').reset();
+        } else {
+            alert('Error al registrar el libro');
+        }
+    })
+    .catch(error => console.error('Error al registrar el libro:', error));
+}
+
 // Función para cargar todos los libros
 function loadBooks() {
     fetch('http://localhost:3000/api/books')
@@ -32,20 +59,6 @@ function loadBooks() {
         .catch(error => console.error('Error al cargar los libros:', error));
 }
 
-// Función para ver el PDF en el iframe
-function viewPdf(pdfUrl) {
-    const pdfViewer = document.getElementById('pdfViewer');
-    const pdfFrame = document.getElementById('pdfFrame');
-
-    if (pdfViewer.style.display === 'none' || pdfFrame.src !== pdfUrl) {
-        pdfFrame.src = pdfUrl;
-        pdfViewer.style.display = 'block';
-    } else {
-        pdfFrame.src = ''; 
-        pdfViewer.style.display = 'none';
-    }
-}
-
 // Función para mostrar el formulario de edición con los datos del libro
 function editBook(bookId) {
     fetch(`http://localhost:3000/api/books/${bookId}`)
@@ -55,7 +68,7 @@ function editBook(bookId) {
             document.getElementById('editName').value = book.nombre;
             document.getElementById('editAuthor').value = book.autor;
             document.getElementById('editGenre').value = book.genero;
-            document.getElementById('editStatus').value = book.estatus.toString(); 
+            document.getElementById('editStatus').value = book.estatus.toString();
             document.getElementById('editBookFormContainer').style.display = 'block';
         })
         .catch(error => console.error('Error al cargar los datos del libro:', error));
@@ -96,4 +109,26 @@ function updateBook(event) {
 function cancelEdit() {
     document.getElementById('editBookFormContainer').style.display = 'none';
     document.getElementById('editBookForm').reset();
+}
+
+// Función para ver el PDF en el iframe
+function viewPdf(pdfUrl) {
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfFrame = document.getElementById('pdfFrame');
+
+    if (pdfViewer.style.display === 'none' || pdfFrame.src !== pdfUrl) {
+        pdfFrame.src = pdfUrl;
+        pdfViewer.style.display = 'block';
+    } else {
+        pdfFrame.src = ''; 
+        pdfViewer.style.display = 'none';
+    }
+}
+
+// Función de cierre de sesión
+function logout() {
+    localStorage.removeItem('token');  
+    sessionStorage.removeItem('token'); 
+
+    window.location.href = 'index.html';
 }

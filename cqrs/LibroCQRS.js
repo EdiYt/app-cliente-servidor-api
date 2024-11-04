@@ -1,4 +1,4 @@
-const booksDao = require('../dao/booksDao');
+const booksDao = require('../dao/LibroDAO');
 
 class CQRSLibro {
     async insert(nombre, autor, genero, pdfUrl) {

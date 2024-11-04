@@ -1,12 +1,12 @@
 const cloudinary = require('../config/cloudinary'); 
 const path = require('path');
-const booksDao = require('../dao/booksDao');
+const booksDao = require('../dao/LibroDAO');
 const fs = require('fs');
-const LibrosExternosAppService = require('../appService/librosExternosAppService');
+const LibrosExternosAppService = require('../appService/LibrosExternosAppService');
 const librosExternosService = new LibrosExternosAppService();
 
 // Obtener todos los libros
-async function getAllBooks(req, res) {
+async function obtenerTodosLibros(req, res) {
     try {
         const books = await booksDao.getAll();
         console.log(books);
@@ -18,7 +18,7 @@ async function getAllBooks(req, res) {
 }
 
 // Obtener un libro por su ID
-async function getBookById(req, res) {
+async function obtenerLibroId(req, res) {
     try {
         const id = req.params.id;
         const book = await booksDao.getById(id);
@@ -33,7 +33,7 @@ async function getBookById(req, res) {
 }
 
 // Insertamos un libro
-async function createBook(req, res) {
+async function crearLibro(req, res) {
     try {
         const { nombre, autor, genero, universidad } = req.body; 
         let pdfUrl = null;
@@ -92,7 +92,7 @@ async function createBook(req, res) {
 }
 
 // Actualizar un libro
-async function updateBook(req, res) {
+async function actualizarLibro(req, res) {
     const { id } = req.params;
     const { nombre, autor, genero, estatus } = req.body; 
 
@@ -161,10 +161,10 @@ async function getAllBooksPublicTodo(req, res) {
 }
 
 module.exports = {
-    getAllBooks,
+    obtenerTodosLibros,
     getAllPublico,
     getAllBooksPublicTodo,
-    getBookById,
-    createBook,
-    updateBook,
+    obtenerLibroId,
+    crearLibro,
+    actualizarLibro,
 };

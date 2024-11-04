@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bookController = require('../controllers/bookController');
+const bookController = require('../controllers/LibroController');
 
 // Ruta para obtener libros de ambas fuentes
 router.get('/all', bookController.getAllBooksPublicTodo); 
@@ -9,15 +9,15 @@ router.get('/all', bookController.getAllBooksPublicTodo);
 router.get('/publico', bookController.getAllPublico);
 
 // Ruta para obtener un libro por ID
-router.get('/:id', bookController.getBookById);
+router.get('/:id', bookController.obtenerLibroId);
 
 // Ruta para obtener todos los libros
-router.get('/', bookController.getAllBooks);
+router.get('/', bookController.obtenerTodosLibros);
 
 // Ruta para crear un nuevo libro
-router.post('/', bookController.createBook);
+router.post('/', bookController.crearLibro);
 
 // Ruta para actualizar un libro
-router.put('/:id', bookController.updateBook);
+router.put('/:id', bookController.actualizarLibro);
 
 module.exports = router;

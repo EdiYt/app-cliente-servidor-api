@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authController');
+const loginController = require('../controllers/LoginController');
 
 // Ruta para registrar un usuario
-router.post('/register', authController.register);
+router.post('/register', loginController.register);
 
 // Ruta para iniciar sesión
-router.post('/login', authController.login);
+router.post('/login', loginController.login);
 
 // Exportar el router para ser usado en el servidor principal
 module.exports = router;

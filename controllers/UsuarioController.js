@@ -1,7 +1,7 @@
-const usersDao = require('../dao/usersDao');
+const usersDao = require('../dao/UsuarioDAO');
 
 // Obtener todos los usuarios 
-async function getUsers(req, res) {
+async function obtenerUsuarios(req, res) {
     try {
         const users = await usersDao.getAll(); 
         res.json(users);
@@ -31,7 +31,7 @@ async function getAllPublico(req, res) {
 }
 
 // Obtener un usuario por ID
-async function getUserById(req, res) {
+async function obtenerUsuarioId(req, res) {
     const { id } = req.params;
     try {
         const user = await usersDao.getById(id);
@@ -46,7 +46,7 @@ async function getUserById(req, res) {
 }
 
 // Registrar un usuario
-async function registerUser(req, res) {
+async function registrarUsuario(req, res) {
     const { nombre, email, password, rol } = req.body;
     try {
         const userId = await usersDao.insert({ nombre, email, password, rol });
@@ -58,7 +58,7 @@ async function registerUser(req, res) {
 }
 
 // Actualizar un usuario
-async function updateUser(req, res) {
+async function actualizarUsuario(req, res) {
     const { id } = req.params;
     const { nombre, email } = req.body;
 
@@ -89,9 +89,9 @@ async function updateUser(req, res) {
 }
 
 module.exports = {
-    getUsers,        
+    obtenerUsuarios,        
     getAllPublico,   
-    getUserById,
-    registerUser,
-    updateUser
+    obtenerUsuarioId,
+    registrarUsuario,
+    actualizarUsuario
 };

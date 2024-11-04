@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const usersDao = require('../dao/usersDao'); 
+const usersDao = require('../dao/UsuarioDAO'); 
 
 // Registro de usuario
 exports.register = async (req, res) => {

@@ -1,4 +1,4 @@
-const usersDao = require('../dao/usersDao');
+const usersDao = require('../dao/UsuarioDAO');
 
 class CQRSUsuario {
     // Comando para registrar un usuario

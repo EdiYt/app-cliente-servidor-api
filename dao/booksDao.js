@@ -12,11 +12,13 @@ async function getById(id) {
     return rows[0]; 
 }
 
-// Método que inserta un nuevo libro
-async function insert(book) {
-    const { nombre, autor, genero, pdf_path } = book; 
-    const result = await db.query('INSERT INTO libros (nombre, autor, genero, pdf_path) VALUES (?, ?, ?, ?)', [nombre, autor, genero, pdf_path]);
-    return result[0].insertId; 
+async function insert(bookData) {
+    const { nombre, autor, genero, universidad, pdf_path } = bookData;
+    const result = await db.query(
+        `INSERT INTO libros (nombre, autor, genero, universidad, pdf_path) VALUES (?, ?, ?, ?, ?)`,
+        [nombre, autor, genero, universidad, pdf_path]
+    );
+    return result.insertId;
 }
 
 // Método que actualiza los datos de un libro

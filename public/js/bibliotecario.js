@@ -12,6 +12,7 @@ function registerBook(event) {
     formData.append('nombre', document.getElementById('registerName').value);
     formData.append('autor', document.getElementById('registerAuthor').value);
     formData.append('genero', document.getElementById('registerGenre').value);
+    formData.append('universidad', 'UNAM'); 
     const pdfFile = document.getElementById('registerPdf').files[0];
     if (pdfFile) formData.append('pdf', pdfFile);
 
@@ -31,7 +32,6 @@ function registerBook(event) {
     .catch(error => console.error('Error al registrar el libro:', error));
 }
 
-// Función para cargar todos los libros
 function loadBooks() {
     fetch('http://localhost:3000/api/books')
         .then(response => response.json())
@@ -41,17 +41,12 @@ function loadBooks() {
             books.forEach(book => {
                 const row = document.createElement('tr');
                 const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
-                const estatus = book.estatus ? 'Disponible' : 'No disponible';
 
                 row.innerHTML = `
                     <td>${book.nombre}</td>
-                    <td>${book.autor}</td>
+                    <td>${book.universidad}</td>
                     <td>${book.genero}</td>
-                    <td>${estatus}</td>
                     <td>${pdfLink}</td>
-                    <td>
-                        <button onclick="editBook(${book.id})">Editar</button>
-                    </td>
                 `;
                 bookTable.appendChild(row);
             });

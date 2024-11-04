@@ -35,10 +35,10 @@ async function getBookById(req, res) {
 // Insertamos un libro
 async function createBook(req, res) {
     try {
-        const { nombre, autor, genero } = req.body;
+        const { nombre, autor, genero, universidad } = req.body; 
         let pdfUrl = null;
 
-        console.log('Datos del libro a registrar:', { nombre, autor, genero });
+        console.log('Datos del libro a registrar:', { nombre, autor, genero, universidad });
 
         if (req.files && req.files.pdf) {
             const pdfFile = req.files.pdf;
@@ -65,7 +65,13 @@ async function createBook(req, res) {
         }
 
         console.log("Insertando el libro en la base de datos...");
-        const newBookId = await booksDao.insert({ nombre, autor, genero, pdf_path: pdfUrl });
+        const newBookId = await booksDao.insert({
+            nombre,
+            autor,
+            genero,
+            universidad,   
+            pdf_path: pdfUrl
+        });
 
         console.log(`Libro creado con ID: ${newBookId}`);
 
@@ -76,6 +82,7 @@ async function createBook(req, res) {
             nombre,
             autor,
             genero,
+            universidad,
             pdfUrl
         });
     } catch (err) {

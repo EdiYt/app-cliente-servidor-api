@@ -144,16 +144,20 @@ async function getAllPublico(req, res) {
 // Get All publico hacia Oscar
 async function getAllBooksPublicTodo(req, res) {
     try {
-        const librosExternos = await librosExternosService.fetchLibrosExternos();
+        const librosPropios = await booksDao.getAll();
 
-        const librosPropios = await booksDao.getAll(); 
+        let librosExternos = [];
+        try {
+            librosExternos = await librosExternosService.fetchLibrosExternos();
+        } catch (error) {
+            console.warn('No se pudieron obtener los libros externos:', error);
+        }
 
-        const allBooks = {
-            externos: librosExternos,
-            propios: librosPropios
-        };
+        // Aqui combino los libros propios y externos
+        const todosLosLibros = [...librosPropios, ...librosExternos];
 
-        res.json(allBooks);
+        // Respuesta con los libros combinados
+        res.json(todosLosLibros);
     } catch (error) {
         console.error('Error al cargar libros:', error);
         res.status(500).json({ error: 'Error al cargar libros' });

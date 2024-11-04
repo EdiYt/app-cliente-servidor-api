@@ -1,28 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadBooks();
+    loadAllBooks();
 });
 
 // Función para cargar todos los libros
-function loadBooks() {
-    fetch('http://localhost:3000/api/books')
-        .then(response => response.json())
-        .then(books => {
-            const bookTable = document.querySelector('#bookTable tbody');
-            bookTable.innerHTML = '';
-            books.forEach(book => {
-                const row = document.createElement('tr');
-                const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
+async function loadAllBooks() {
+    try {
+        const response = await fetch('http://localhost:3000/api/books/all');
+        const books = await response.json();
 
-                row.innerHTML = `
-                    <td>${book.nombre}</td>
-                    <td>${book.universidad || 'UNAM'}</td>
-                    <td>${book.genero}</td>
-                    <td>${pdfLink}</td>
-                `;
-                bookTable.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error al cargar los libros:', error));
+        if (Array.isArray(books)) {
+            const allBooks = [].concat(books);
+            console.log("Libros combinados:", allBooks);
+            displayBooks(allBooks); 
+        } else {
+            console.error("Error: la respuesta de libros no es un array");
+        }
+    } catch (error) {
+        console.error('Error al cargar libros:', error);
+    }
+}
+
+function displayBooks(books) {
+    const bookTable = document.querySelector('#bookTable tbody');
+    bookTable.innerHTML = '';
+
+    books.forEach(book => {
+        console.log('Mostrando libro:', book); 
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${book.nombre || book.titulo}</td>
+            <td>${book.universidad || 'Desconocida'}</td>
+            <td>${book.genero || book.categoria}</td>
+            <td>
+                <button onclick="viewPdf('${book.pdf_path || book.pdfLink}')">Ver PDF</button>
+            </td>
+        `;
+        bookTable.appendChild(row);
+    });
 }
 
 // Función para filtrar libros en el buscador

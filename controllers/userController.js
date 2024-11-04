@@ -47,9 +47,9 @@ async function getUserById(req, res) {
 
 // Registrar un usuario
 async function registerUser(req, res) {
-    const { nombre, email, password } = req.body;
+    const { nombre, email, password, rol } = req.body;
     try {
-        const userId = await usersDao.insert({ nombre, email, password });
+        const userId = await usersDao.insert({ nombre, email, password, rol });
         res.status(201).json({ message: 'Usuario registrado con éxito', userId });
     } catch (err) {
         console.error('Error al registrar usuario:', err);

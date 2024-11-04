@@ -20,8 +20,10 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         if (response.ok) {
             if (data.user && data.user.rol === 'alumno') {
                 window.location.href = 'alumno.html'; 
-            } else if (data.user && data.user.rol === 'biblio') { 
+            } else if (data.user && data.user.rol === 'biblio') {
                 window.location.href = 'bibliotecario.html';
+            } else if (data.user && data.user.rol === 'admin') {
+                window.location.href = 'admin.html'; 
             } else {
                 alert('Error al obtener los datos del usuario');
             }

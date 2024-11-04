@@ -17,21 +17,21 @@
         <div class="container">
             <label for="searchInput" class="search-label">Buscador de libros:</label>
             <!-- Buscador de libros -->
-            <input type="text" id="searchInput" placeholder="Nombre, autor o género" oninput="filterBooks()" />
+            <input type="text" id="searchInput" placeholder="Nombre, universidad o genero" oninput="filterBooks()" />
 
             <!-- Lista de Libros -->
             <table id="bookTable">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Autor</th>
+                        <th>Nombre del Libro</th>
+                        <th>Universidad</th>
                         <th>Género</th>
-                        <th>Estatus</th>
                         <th>PDF</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
-            </table>
+                <tbody>
+                </tbody>
+            </table>            
 
             <!-- iframe para mostrar el PDF -->
             <div id="pdfViewer" style="display: none; margin-top: 20px;">

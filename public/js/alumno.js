@@ -4,24 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Función para cargar todos los libros
 function loadBooks() {
-    fetch('http://localhost:3000/api/books/publico')//Cambiar esta ruta hacia el "/all" para que ahora traiga los libros de los demas
+    fetch('http://localhost:3000/api/books')
         .then(response => response.json())
         .then(books => {
             const bookTable = document.querySelector('#bookTable tbody');
-            bookTable.innerHTML = ''; 
+            bookTable.innerHTML = '';
             books.forEach(book => {
-                const estatus = book.disponibilidad ? 'Disponible' : 'No disponible';
-                
-                const pdfLink = book.pdfLink
-                    ? `<button onclick="viewPdf('${book.pdfLink}')">Ver</button>`
-                    : 'No disponible';
-
                 const row = document.createElement('tr');
+                const pdfLink = book.pdf_path ? `<button onclick="viewPdf('${book.pdf_path}')">Ver PDF</button>` : 'No disponible';
+
                 row.innerHTML = `
-                    <td>${book.titulo}</td>
-                    <td>${book.escritor}</td>
-                    <td>${book.categoria}</td>
-                    <td>${estatus}</td>
+                    <td>${book.nombre}</td>
+                    <td>${book.universidad || 'UNAM'}</td>
+                    <td>${book.genero}</td>
                     <td>${pdfLink}</td>
                 `;
                 bookTable.appendChild(row);

@@ -62,28 +62,21 @@ async function actualizarUsuario(req, res) {
     const { id } = req.params;
     const { nombre, email } = req.body;
 
-    const originalUser = await usersDao.getById(id);
-
-    if (!originalUser) {
-        console.warn(`No se encontró el usuario con ID: ${id}`); 
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-    }
-
-    console.log(`Datos originales del usuario con ID: ${id}`, { 
-        nombre: originalUser.nombre, 
-        email: originalUser.email 
-    });
     try {
+        const originalUser = await usersDao.getById(id);
+
+        if (!originalUser) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
         const affectedRows = await usersDao.update(id, { nombre, email });
         if (affectedRows > 0) {
-            console.log(`Usuario ${id} actualizado con éxito:`, { nombre, email });
             res.json({ message: 'Usuario actualizado exitosamente' });
         } else {
-            console.warn(`No se encontró el usuario con ID: ${id}`); 
             res.status(404).json({ error: 'Usuario no encontrado' });
         }
     } catch (err) {
-        console.error('Error al actualizar el usuario:', err); 
+        console.error('Error al actualizar el usuario:', err);
         return res.status(500).json({ error: 'Error al actualizar el usuario' });
     }
 }

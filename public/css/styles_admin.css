@@ -115,3 +115,7 @@ h1, h2 {
     color: #003366;
     margin-bottom: 20px;
 }
+
+#editUserFormContainer {
+    margin-top: 20px;
+}

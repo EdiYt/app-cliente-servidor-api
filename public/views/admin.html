@@ -44,10 +44,24 @@
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Rol</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
+
+            <div id="editUserFormContainer" style="display: none; margin-top: 20px;">
+                <h2>Editar Usuario</h2>
+                <form id="editUserForm" onsubmit="updateUser(event)">
+                    <input type="hidden" id="editUserId">
+                    <label for="editName">Nombre:</label>
+                    <input type="text" id="editName" required>
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" required>
+                    <button type="submit">Actualizar Usuario</button>
+                    <button type="button" onclick="cancelEdit()">Cancelar</button>
+                </form>
+            </div>
         </div>
     </div>
 

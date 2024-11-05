@@ -12,7 +12,7 @@ class BooksViewModel {
             autor: book.autor || '',
             genero: book.genero || '',
             universidad: book.universidad || '',
-            pdfPath: book.pdf_path || book.ruta || '', // Aquí ajustamos para aceptar pdf_path o ruta
+            pdfPath: book.pdf_path || book.ruta || '', 
             estatus: book.estatus ? 'Disponible' : 'No disponible',
         };
     }

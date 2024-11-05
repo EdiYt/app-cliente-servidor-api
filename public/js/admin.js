@@ -16,6 +16,9 @@ function loadUsers() {
                     <td>${user.nombre}</td>
                     <td>${user.email}</td>
                     <td>${user.rol}</td>
+                    <td>
+                        <button onclick="editUser(${user.id})">Editar</button>
+                    </td>
                 `;
                 userTable.appendChild(row);
             });
@@ -58,4 +61,49 @@ function logout() {
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
     window.location.href = 'index.html';
+}
+
+function editUser(userId) {
+    fetch(`http://localhost:3000/api/users/${userId}`)
+        .then(response => response.json())
+        .then(user => {
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editName').value = user.nombre;
+            document.getElementById('editEmail').value = user.email;
+            document.getElementById('editUserFormContainer').style.display = 'block';
+        })
+        .catch(error => console.error('Error al cargar los datos del usuario:', error));
+}
+
+function updateUser(event) {
+    event.preventDefault();
+
+    const userId = document.getElementById('editUserId').value;
+    const updatedUser = {
+        nombre: document.getElementById('editName').value,
+        email: document.getElementById('editEmail').value
+    };
+
+    fetch(`http://localhost:3000/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedUser)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Usuario actualizado correctamente');
+            loadUsers();
+            document.getElementById('editUserFormContainer').style.display = 'none';
+        } else {
+            alert('Error al actualizar el usuario');
+        }
+    })
+    .catch(error => console.error('Error al actualizar el usuario:', error));
+}
+
+function cancelEdit() {
+    document.getElementById('editUserFormContainer').style.display = 'none';
+    document.getElementById('editUserForm').reset();
 }

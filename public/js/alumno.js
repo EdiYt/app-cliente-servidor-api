@@ -1,6 +1,10 @@
+import LibroViewModel from '/viewmodels/LibroViewModel.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     loadAllBooks();
 });
+
+const libroViewModel = new LibroViewModel();
 
 // Función para cargar todos los libros
 async function loadAllBooks() {
@@ -9,7 +13,8 @@ async function loadAllBooks() {
         const books = await response.json();
 
         if (Array.isArray(books)) {
-            const allBooks = [].concat(books);
+            // Mapea los libros externos usando LibroViewModel
+            const allBooks = books.map(book => libroViewModel.mapBooksData(book));
             console.log("Libros combinados:", allBooks);
             displayBooks(allBooks); 
         } else {
@@ -28,43 +33,15 @@ function displayBooks(books) {
         console.log('Mostrando libro:', book); 
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${book.nombre || book.titulo}</td>
+            <td>${book.nombre}</td>
             <td>${book.universidad || 'Desconocida'}</td>
-            <td>${book.genero || book.categoria}</td>
+            <td>${book.genero}</td>
             <td>
-                <button onclick="viewPdf('${book.pdf_path || book.pdfLink}')">Ver PDF</button>
+                <button onclick="viewPdf('${book.pdfPath}')">Ver PDF</button>
             </td>
         `;
         bookTable.appendChild(row);
     });
-}
-
-// Función para filtrar libros en el buscador
-function filterBooks() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const rows = document.querySelectorAll('#bookTable tbody tr');
-
-    rows.forEach(row => {
-        const [title, author, genre] = row.children;
-        const isVisible = [title, author, genre].some(cell =>
-            cell.textContent.toLowerCase().includes(query)
-        );
-        row.style.display = isVisible ? '' : 'none';
-    });
-}
-
-// Función para mostrar el PDF en una nueva pestaña
-function viewPdf(pdfUrl) {
-    window.open(pdfUrl, '_blank');
-}
-
-// Función para mostrar el PDF en el iframe
-function viewPdf(pdfUrl) {
-    const pdfViewer = document.getElementById('pdfViewer');
-    const pdfFrame = document.getElementById('pdfFrame');
-
-    pdfFrame.src = pdfUrl;
-    pdfViewer.style.display = 'block'; 
 }
 
 let currentPdfUrl = null;

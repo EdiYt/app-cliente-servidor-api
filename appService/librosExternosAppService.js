@@ -3,7 +3,7 @@ class LibrosExternosAppService {
     }
 
     fetchLibrosExternos() {
-        const apiUrl = 'http://192.168.137.1:8081/api/libros/obtenerLibros'; 
+        const apiUrl = 'http://192.168.188.114:8081/api/libros/obtenerLibros'; 
 
         return fetch(apiUrl, {
             method: 'GET', 

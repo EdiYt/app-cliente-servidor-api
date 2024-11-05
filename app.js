@@ -4,10 +4,15 @@ const fileUpload = require('express-fileupload');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const bookRoutes = require('./routes/bookRoutes');
+const path = require('path');
 
 require('dotenv').config();
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/viewmodels', express.static(path.join(__dirname, 'viewmodels')));
+
 
 app.use(cors({
     origin: '*'
